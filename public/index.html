@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Turnos</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎫 Sistema de Gestión de Turnos</h1>
+            <p class="subtitle">Gestiona turnos de manera eficiente y organizada</p>
+        </header>
+
+        <!-- Instrucciones -->
+        <section class="instructions">
+            <h2>📋 Instrucciones de Uso</h2>
+            <div class="instruction-grid">
+                <div class="instruction-card">
+                    <div class="step-number">1</div>
+                    <h3>Registrar Turno</h3>
+                    <p>Ingresa el nombre del cliente y selecciona la prioridad (Normal o Alta)</p>
+                </div>
+                <div class="instruction-card">
+                    <div class="step-number">2</div>
+                    <h3>Ver Cola</h3>
+                    <p>Los turnos prioritarios aparecen primero, seguidos de los normales</p>
+                </div>
+                <div class="instruction-card">
+                    <div class="step-number">3</div>
+                    <h3>Atender o Cancelar</h3>
+                    <p>Usa los botones en cada fila para atender o cancelar turnos</p>
+                </div>
+                <div class="instruction-card">
+                    <div class="step-number">4</div>
+                    <h3>Consultar Historial</h3>
+                    <p>Revisa los turnos atendidos y cancelados con filtros de búsqueda</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formulario de Registro -->
+        <section class="register-section">
+            <h2>➕ Registrar Nuevo Turno</h2>
+            <form id="registerForm" class="register-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerName">Nombre del Cliente</label>
+                        <input type="text" id="customerName" name="customerName" placeholder="Ej: Juan Pérez" required
+                            autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Prioridad</label>
+                        <select id="priority" name="priority" required>
+                            <option value="normal">Normal</option>
+                            <option value="high">Alta Prioridad</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-group-button">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary">
+                            <span>Registrar Turno</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- Turnos Pendientes -->
+        <section class="turns-section">
+            <div class="section-header">
+                <h2>📊 Turnos Pendientes</h2>
+                <span id="turnCount" class="turn-count">0 turnos</span>
+            </div>
+
+            <div class="table-container">
+                <table id="pendingTable" class="turns-table">
+                    <thead>
+                        <tr>
+                            <th>Turno</th>
+                            <th>Cliente</th>
+                            <th>Prioridad</th>
+                            <th>Hora</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTableBody">
+                        <tr class="empty-row">
+                            <td colspan="5" class="empty-state">No hay turnos pendientes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Historial de Turnos -->
+        <section class="history-section">
+            <div class="section-header">
+                <h2>📜 Historial de Turnos</h2>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="filterStatus">Estado</label>
+                    <select id="filterStatus">
+                        <option value="all">Todos</option>
+                        <option value="attended">Atendidos</option>
+                        <option value="cancelled">Cancelados</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterDate">Fecha</label>
+                    <input type="date" id="filterDate">
+                </div>
+                <div class="filter-group">
+                    <label for="filterSearch">Buscar</label>
+                    <input type="text" id="filterSearch" placeholder="Nombre o turno...">
+                </div>
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button id="clearFiltersBtn" class="btn btn-secondary btn-small">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="historyTable" class="turns-table">
+                    <thead>
+                        <tr>
+                            <th>Turno</th>
+                            <th>Cliente</th>
+                            <th>Prioridad</th>
+                            <th>Hora Registro</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr class="empty-row">
+                            <td colspan="5" class="empty-state">No hay turnos en el historial</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Notificaciones -->
+        <div id="notification" class="notification"></div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
