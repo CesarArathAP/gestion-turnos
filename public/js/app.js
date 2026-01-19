@@ -356,7 +356,7 @@ function applyFilters() {
             return false;
         }
 
-        // Filtro de fecha
+        // Filtro de fecha (solo día)
         if (dateFilter) {
             const turnDate = new Date(turn.timestamp).toISOString().split('T')[0];
             if (turnDate !== dateFilter) {
@@ -374,6 +374,9 @@ function applyFilters() {
 
         return true;
     });
+
+    // Ordenar del más reciente al más antiguo
+    state.filteredHistory.sort((a, b) => b.timestamp - a.timestamp);
 
     renderHistory();
 }

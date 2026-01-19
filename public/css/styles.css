@@ -94,67 +94,89 @@ body {
 }
 
 /* ========== Instrucciones ========== */
-.instructions {
-  background: var(--surface-color);
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  margin-bottom: var(--spacing-xl);
-}
+/* Sección eliminada - Ahora se usan alertas contextuales */
 
-.instructions h2 {
-  font-size: 1.5rem;
-  margin-bottom: var(--spacing-lg);
-  color: var(--text-primary);
-}
-
-.instruction-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
-}
-
-.instruction-card {
-  background: var(--bg-color);
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-md);
-  border: 2px solid var(--border-color);
-  transition: var(--transition);
-  position: relative;
-}
-
-.instruction-card:hover {
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.step-number {
-  position: absolute;
-  top: -12px;
-  left: var(--spacing-lg);
-  background: var(--primary-color);
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+/* ========== Alertas Contextuales ========== */
+.alert {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.9rem;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  border-left: 4px solid;
+  background: var(--bg-color);
+  animation: slideIn 0.3s ease;
 }
 
-.instruction-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: var(--spacing-sm);
-  margin-top: var(--spacing-sm);
+.alert-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-content strong {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-size: 1rem;
   color: var(--text-primary);
 }
 
-.instruction-card p {
+.alert-content p {
+  margin: 0;
+  font-size: 0.9rem;
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.alert-info {
+  border-left-color: var(--primary-color);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(79, 70, 229, 0.02));
+}
+
+.alert-info .alert-icon {
+  color: var(--primary-color);
+}
+
+.alert-warning {
+  border-left-color: var(--warning-color);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(245, 158, 11, 0.02));
+}
+
+.alert-warning .alert-icon {
+  color: var(--warning-color);
+}
+
+.alert-success {
+  border-left-color: var(--success-color);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
+}
+
+.alert-success .alert-icon {
+  color: var(--success-color);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== Grid de Tablas (lado a lado) ========== */
+.tables-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 /* ========== Secciones ========== */
@@ -165,6 +187,9 @@ body {
   padding: var(--spacing-xl);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+}
+
+.register-section {
   margin-bottom: var(--spacing-xl);
 }
 
@@ -601,6 +626,11 @@ body {
   .btn-action {
     font-size: 0.75rem;
     padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  /* Tablas en columna en móvil */
+  .tables-grid {
+    grid-template-columns: 1fr;
   }
 }
 
