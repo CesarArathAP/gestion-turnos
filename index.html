@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Turnos</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎫 Sistema de Gestión de Turnos</h1>
+            <p class="subtitle">Gestión simple y eficiente de turnos</p>
+        </header>
+
+        <!-- Formulario de Registro -->
+        <section class="card">
+            <h2>➕ Registrar Turno</h2>
+            <div class="alert alert-info">
+                <strong>ℹ️ Instrucciones:</strong> Ingresa el nombre del cliente y selecciona la prioridad. Los turnos
+                de alta prioridad se atienden primero.
+            </div>
+
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="customerName">Nombre del Cliente</label>
+                    <input type="text" id="customerName" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label for="priority">Prioridad</label>
+                    <select id="priority">
+                        <option value="normal">Normal</option>
+                        <option value="high">Alta Prioridad</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar Turno</button>
+            </form>
+        </section>
+
+        <!-- Turnos Pendientes -->
+        <section class="card">
+            <div class="section-header">
+                <h2>📊 Turnos Pendientes</h2>
+                <span id="turnCount" class="badge">0 turnos</span>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>⚡ Reglas:</strong> Solo puedes atender el siguiente turno en la cola. Los turnos prioritarios se
+                atienden primero.
+            </div>
+
+            <div id="pendingList" class="turn-list">
+                <p class="empty-state">No hay turnos pendientes</p>
+            </div>
+        </section>
+
+        <!-- Historial -->
+        <section class="card">
+            <h2>📜 Historial de Turnos</h2>
+
+            <div class="alert alert-success">
+                <strong>🔍 Consulta:</strong> Aquí encontrarás todos los turnos atendidos y cancelados.
+            </div>
+
+            <div id="historyList" class="turn-list">
+                <p class="empty-state">No hay turnos en el historial</p>
+            </div>
+        </section>
+
+        <!-- Notificación -->
+        <div id="notification" class="notification"></div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
