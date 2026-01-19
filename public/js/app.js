@@ -3,13 +3,29 @@
  * 
  * Maneja la interacción del usuario con la interfaz
  * y la comunicación con la API
+ * 
+ * Incluye infinite scroll para tablas grandes
  */
+
+// Configuración de paginación
+const PAGINATION_CONFIG = {
+    pendingPageSize: 20,  // Mostrar 20 turnos pendientes a la vez
+    historyPageSize: 30   // Mostrar 30 turnos de historial a la vez
+};
 
 // Estado de la aplicación
 const state = {
     pendingTurns: [],
     allTurns: [],
-    filteredHistory: []
+    filteredHistory: [],
+
+    // Paginación
+    pendingDisplayCount: PAGINATION_CONFIG.pendingPageSize,
+    historyDisplayCount: PAGINATION_CONFIG.historyPageSize,
+
+    // Flags de carga
+    loadingMorePending: false,
+    loadingMoreHistory: false
 };
 
 // Elementos del DOM
@@ -32,6 +48,7 @@ const elements = {
  */
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    setupScrollListeners();
     loadTurns();
 
     // Auto-refresh cada 5 segundos
@@ -45,10 +62,84 @@ function setupEventListeners() {
     elements.registerForm.addEventListener('submit', handleRegisterTurn);
 
     // Filtros
-    elements.filterStatus.addEventListener('change', applyFilters);
-    elements.filterDate.addEventListener('change', applyFilters);
-    elements.filterSearch.addEventListener('input', applyFilters);
+    elements.filterStatus.addEventListener('change', () => {
+        state.historyDisplayCount = PAGINATION_CONFIG.historyPageSize;
+        applyFilters();
+    });
+    elements.filterDate.addEventListener('change', () => {
+        state.historyDisplayCount = PAGINATION_CONFIG.historyPageSize;
+        applyFilters();
+    });
+    elements.filterSearch.addEventListener('input', () => {
+        state.historyDisplayCount = PAGINATION_CONFIG.historyPageSize;
+        applyFilters();
+    });
     elements.clearFiltersBtn.addEventListener('click', clearFilters);
+}
+
+/**
+ * Configurar listeners de scroll para infinite scroll
+ */
+function setupScrollListeners() {
+    // Scroll para tabla de pendientes
+    const pendingContainer = document.querySelector('#pendingTable').closest('.table-container');
+    pendingContainer.addEventListener('scroll', () => {
+        if (isNearBottom(pendingContainer) && !state.loadingMorePending) {
+            loadMorePending();
+        }
+    });
+
+    // Scroll para tabla de historial
+    const historyContainer = document.querySelector('#historyTable').closest('.table-container');
+    historyContainer.addEventListener('scroll', () => {
+        if (isNearBottom(historyContainer) && !state.loadingMoreHistory) {
+            loadMoreHistory();
+        }
+    });
+}
+
+/**
+ * Verificar si el scroll está cerca del final
+ */
+function isNearBottom(element) {
+    const threshold = 100; // pixels desde el final
+    return element.scrollHeight - element.scrollTop - element.clientHeight < threshold;
+}
+
+/**
+ * Cargar más turnos pendientes
+ */
+function loadMorePending() {
+    if (state.pendingDisplayCount >= state.pendingTurns.length) {
+        return; // Ya se muestran todos
+    }
+
+    state.loadingMorePending = true;
+
+    // Simular pequeño delay para UX
+    setTimeout(() => {
+        state.pendingDisplayCount += PAGINATION_CONFIG.pendingPageSize;
+        renderPendingTurns();
+        state.loadingMorePending = false;
+    }, 300);
+}
+
+/**
+ * Cargar más turnos de historial
+ */
+function loadMoreHistory() {
+    if (state.historyDisplayCount >= state.filteredHistory.length) {
+        return; // Ya se muestran todos
+    }
+
+    state.loadingMoreHistory = true;
+
+    // Simular pequeño delay para UX
+    setTimeout(() => {
+        state.historyDisplayCount += PAGINATION_CONFIG.historyPageSize;
+        renderHistory();
+        state.loadingMoreHistory = false;
+    }, 300);
 }
 
 /**
@@ -180,9 +271,10 @@ async function loadTurns() {
  */
 function renderPendingTurns() {
     // Actualizar contador
-    elements.turnCount.textContent = `${state.pendingTurns.length} turno${state.pendingTurns.length !== 1 ? 's' : ''}`;
+    const totalPending = state.pendingTurns.length;
+    elements.turnCount.textContent = `${totalPending} turno${totalPending !== 1 ? 's' : ''}`;
 
-    if (state.pendingTurns.length === 0) {
+    if (totalPending === 0) {
         elements.pendingTableBody.innerHTML = `
       <tr class="empty-row">
         <td colspan="5" class="empty-state">No hay turnos pendientes</td>
@@ -191,8 +283,12 @@ function renderPendingTurns() {
         return;
     }
 
+    // Obtener solo los turnos a mostrar
+    const turnsToDisplay = state.pendingTurns.slice(0, state.pendingDisplayCount);
+    const hasMore = state.pendingDisplayCount < totalPending;
+
     // Renderizar filas
-    elements.pendingTableBody.innerHTML = state.pendingTurns.map((turn, index) => {
+    let html = turnsToDisplay.map((turn, index) => {
         const time = new Date(turn.timestamp).toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit'
@@ -227,6 +323,20 @@ function renderPendingTurns() {
       </tr>
     `;
     }).join('');
+
+    // Agregar indicador de "cargando más" si hay más turnos
+    if (hasMore) {
+        html += `
+      <tr class="loading-row">
+        <td colspan="5" class="loading-indicator">
+          <div class="loading-spinner"></div>
+          Mostrando ${turnsToDisplay.length} de ${totalPending} turnos. Desplázate hacia abajo para ver más...
+        </td>
+      </tr>
+    `;
+    }
+
+    elements.pendingTableBody.innerHTML = html;
 }
 
 /**
@@ -275,6 +385,7 @@ function clearFilters() {
     elements.filterStatus.value = 'all';
     elements.filterDate.value = '';
     elements.filterSearch.value = '';
+    state.historyDisplayCount = PAGINATION_CONFIG.historyPageSize;
     applyFilters();
 }
 
@@ -282,7 +393,9 @@ function clearFilters() {
  * Renderizar historial
  */
 function renderHistory() {
-    if (state.filteredHistory.length === 0) {
+    const totalHistory = state.filteredHistory.length;
+
+    if (totalHistory === 0) {
         elements.historyTableBody.innerHTML = `
       <tr class="empty-row">
         <td colspan="5" class="empty-state">No hay turnos en el historial</td>
@@ -291,7 +404,11 @@ function renderHistory() {
         return;
     }
 
-    elements.historyTableBody.innerHTML = state.filteredHistory.map(turn => {
+    // Obtener solo los turnos a mostrar
+    const turnsToDisplay = state.filteredHistory.slice(0, state.historyDisplayCount);
+    const hasMore = state.historyDisplayCount < totalHistory;
+
+    let html = turnsToDisplay.map(turn => {
         const time = new Date(turn.timestamp).toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit'
@@ -319,6 +436,20 @@ function renderHistory() {
       </tr>
     `;
     }).join('');
+
+    // Agregar indicador de "cargando más" si hay más turnos
+    if (hasMore) {
+        html += `
+      <tr class="loading-row">
+        <td colspan="5" class="loading-indicator">
+          <div class="loading-spinner"></div>
+          Mostrando ${turnsToDisplay.length} de ${totalHistory} turnos. Desplázate hacia abajo para ver más...
+        </td>
+      </tr>
+    `;
+    }
+
+    elements.historyTableBody.innerHTML = html;
 }
 
 /**

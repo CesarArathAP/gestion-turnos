@@ -374,8 +374,30 @@ body {
 /* ========== Tablas ========== */
 .table-container {
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: 500px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
+  position: relative;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: var(--bg-color);
+  border-radius: var(--radius-sm);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 .turns-table {
@@ -387,6 +409,9 @@ body {
 .turns-table thead {
   background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .turns-table th {
@@ -408,7 +433,7 @@ body {
   transition: var(--transition);
 }
 
-.turns-table tbody tr:hover:not(.empty-row) {
+.turns-table tbody tr:hover:not(.empty-row):not(.loading-row) {
   background: var(--bg-color);
 }
 
@@ -430,6 +455,34 @@ body {
   padding: var(--spacing-xl) !important;
   color: var(--text-muted);
   font-style: italic;
+}
+
+.loading-row {
+  background: var(--bg-color) !important;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: var(--spacing-md) !important;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: var(--spacing-sm);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ========== Badges en Tabla ========== */

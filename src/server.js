@@ -46,16 +46,7 @@ app.use((err, req, res, next) => {
 // Iniciar servidor
 app.listen(PORT, () => {
     console.log(`
-╔════════════════════════════════════════════════════════╗
-║                                                        ║
-║   Sistema de Gestión de Turnos                        ║
-║                                                        ║
-║   Servidor ejecutándose en:                           ║
-║   http://localhost:${PORT}                               ║
-║                                                        ║
-║   Presiona Ctrl+C para detener el servidor            ║
-║                                                        ║
-╚════════════════════════════════════════════════════════╝
+    http://localhost:${PORT}
   `);
 });
 
