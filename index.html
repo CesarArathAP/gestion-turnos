@@ -40,35 +40,39 @@
             </form>
         </section>
 
-        <!-- Turnos Pendientes -->
-        <section class="card">
-            <div class="section-header">
-                <h2>📊 Turnos Pendientes</h2>
-                <span id="turnCount" class="badge">0 turnos</span>
-            </div>
+        <!-- Contenedor de Tablas (lado a lado) -->
+        <div class="tables-grid">
+            <!-- Turnos Pendientes -->
+            <section class="card">
+                <div class="section-header">
+                    <h2>📊 Turnos Pendientes</h2>
+                    <span id="turnCount" class="badge">0 turnos</span>
+                </div>
 
-            <div class="alert alert-warning">
-                <strong>⚡ Reglas:</strong> Solo puedes atender el siguiente turno en la cola. Los turnos prioritarios se
-                atienden primero.
-            </div>
+                <div class="alert alert-warning">
+                    <strong>⚡ Reglas:</strong> Solo puedes atender el siguiente turno en la cola. Los turnos
+                    prioritarios se
+                    atienden primero.
+                </div>
 
-            <div id="pendingList" class="turn-list">
-                <p class="empty-state">No hay turnos pendientes</p>
-            </div>
-        </section>
+                <div id="pendingList" class="turn-list">
+                    <p class="empty-state">No hay turnos pendientes</p>
+                </div>
+            </section>
 
-        <!-- Historial -->
-        <section class="card">
-            <h2>📜 Historial de Turnos</h2>
+            <!-- Historial -->
+            <section class="card">
+                <h2>📜 Historial de Turnos</h2>
 
-            <div class="alert alert-success">
-                <strong>🔍 Consulta:</strong> Aquí encontrarás todos los turnos atendidos y cancelados.
-            </div>
+                <div class="alert alert-success">
+                    <strong>🔍 Consulta:</strong> Aquí encontrarás todos los turnos atendidos y cancelados.
+                </div>
 
-            <div id="historyList" class="turn-list">
-                <p class="empty-state">No hay turnos en el historial</p>
-            </div>
-        </section>
+                <div id="historyList" class="turn-list">
+                    <p class="empty-state">No hay turnos en el historial</p>
+                </div>
+            </section>
+        </div>
 
         <!-- Notificación -->
         <div id="notification" class="notification"></div>
